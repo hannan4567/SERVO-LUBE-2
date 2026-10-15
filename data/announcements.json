@@ -1,0 +1,6 @@
+{
+  "items": [
+    { "text": "Oct-26 rate chart is now live. Please check the latest dealer rates and schemes.", "active": true },
+    { "text": "Sample inactive notice (set active to true to show).", "active": false }
+  ]
+}

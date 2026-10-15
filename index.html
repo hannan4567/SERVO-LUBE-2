@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>SERVO Dealer Rates</title>
+<style>
+:root{--ink:#0f1b33;--mut:#64708a;--bg:#f3f5fa;--card:#fff;--line:#e3e8f2;--blue:#14306e;--red:#c8102e;--grn:#0b7a3b}
+*{box-sizing:border-box}body{margin:0;font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#0d2252,#1d4aa8);color:#fff;padding:16px 16px 14px;position:sticky;top:0;z-index:5;box-shadow:0 2px 10px #0003}
+.w{max-width:960px;margin:auto}.top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+h1{font-size:19px;margin:0;letter-spacing:.5px}h1 b{color:#ff5b6e}.dt{font-size:12px;opacity:.85}
+.sb{display:flex;gap:8px;margin-top:10px}.ib{border:0;border-radius:12px;background:#fff;color:var(--blue);padding:0 14px;font-size:18px;font-weight:800;cursor:pointer}body.big{font-size:18px}body.big .row .d{font-size:23px}body.big .row .p{font-size:18px}body.big .tg span,body.big .dtl{font-size:15px}
+#q{flex:1;min-width:0;padding:12px 14px;border:0;border-radius:12px;font-size:16px;outline:none}
+.bar{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}.bar::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:#fff;color:var(--blue);padding:7px 13px;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer}
+.chip.on{background:var(--blue);color:#fff;border-color:var(--blue)}.chip.of{border-color:#e8a317;color:#8a5a00}.chip.of.on{background:#e8a317;color:#fff}
+.chip small{opacity:.6;font-weight:500;margin-left:3px}.lbl{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--mut);margin:10px 0 0}
+main{padding:12px 12px 60px}#ann{background:#fff7e0;border-left:4px solid #e8a317;border-radius:8px;padding:9px 12px;margin-bottom:10px;font-size:14px}
+.cnt{color:var(--mut);font-size:13px;margin:4px 2px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;align-items:start}
+.card{background:var(--card);border-radius:14px;box-shadow:0 1px 4px #0b1f4a14;overflow:hidden}
+.ch{padding:12px 14px 8px;display:flex;justify-content:space-between;gap:8px}.ch h3{margin:0;font-size:15.5px;color:var(--blue)}
+.seg{font-size:11.5px;color:var(--mut)}.ob{font-size:11px;font-weight:700;background:#fff1cf;color:#8a5a00;border-radius:99px;padding:3px 9px;height:fit-content;white-space:nowrap}
+.th,.row{display:grid;grid-template-columns:1.2fr 1fr 1.25fr;gap:6px;padding:8px 14px;align-items:center}
+.th{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);background:#f7f9fd;border-top:1px solid var(--line)}.th span:nth-child(n+2),.row .m,.row .d{text-align:right}
+.rw{border-top:1px solid var(--line);cursor:pointer}.rw:active{background:#f4f7ff}.row .p{font-weight:700}.row .p small{display:block;font-weight:400;color:var(--mut);font-size:11.5px}
+.row .m{color:var(--mut)}.row .d{font-size:18px;font-weight:800;color:var(--red)}
+.tg{padding:0 14px 8px;display:flex;flex-wrap:wrap;gap:5px}.tg span{font-size:11.5px;background:#eaf7ef;color:var(--grn);border-radius:6px;padding:2px 8px;font-weight:600}.tg .pr{background:#fde8ec;color:var(--red)}.tg .cs{background:#fff1cf;color:#8a5a00}
+.dtl{display:none;background:#f7f9fd;padding:10px 14px 12px;font-size:13px;border-top:1px dashed var(--line)}.rw.open .dtl{display:block}
+.dtl div{display:flex;justify-content:space-between;padding:2px 0}.dtl b{font-variant-numeric:tabular-nums}
+.wa{display:block;margin-top:8px;text-align:center;background:#1fa855;color:#fff;border-radius:9px;padding:9px;text-decoration:none;font-weight:700}
+.no{text-align:center;color:var(--mut);padding:40px 10px}.foot{text-align:center;color:var(--mut);font-size:12px;margin-top:18px}
+header .chip.on{background:#c8102e;border-color:#fff;color:#fff}
+</style></head><body>
+<header><div class="w"><div class="top"><h1><b>SERVO</b> Dealer Rates</h1><span class="dt" id="dt"></span></div>
+<div class="sb"><input id="q" type="search" placeholder="Search: gear 90, 15w40, 1L…" autocomplete="off"><button class="ib" id="mic" type="button" hidden>🎤</button><button class="ib" id="fs" type="button">A+</button></div>
+<div class="lbl" style="color:#cdd8f3">Category</div><div class="bar" id="sg"></div></div></header>
+<main><div class="w"><div id="ann" hidden></div>
+<div class="lbl">Pack size</div><div class="bar" id="pk"></div>
+<div class="cnt" id="cnt"></div><div class="cnt">👆 Tap a pack for details &amp; WhatsApp</div><div class="grid" id="g"></div>
+<div class="foot">Dealer rate = per can / bucket, inclusive of GST (18%) and all schemes shown. Please verify with the official circular.</div></div></main>
+<script>
+const $=s=>document.getElementById(s),R=n=>"₹"+(+n).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+const BK=[["Under 1 L",s=>s<1],["1 – 1.2 L",s=>s>=1&&s<=1.2],["2 – 5 L",s=>s>1.2&&s<=5],["7.5 L & above",s=>s>5]];
+let P=[],st={q:"",seg:"All",pk:"All",of:false};
+const hay=p=>(p.name+" "+p.code+" "+p.seg+" "+p.pack+" "+p.pack.replace(/ /g,"")).toLowerCase();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function chips(el,items,key){el.innerHTML=items.map(([v,l,n])=>`<button class="chip ${v==="OFFERS"?"of":""} ${st[key]===v||(key==="of"&&v==="OFFERS"&&st.of)?"on":""}" data-v="${esc(v)}">${l}${n!=null?`<small>${n}</small>`:""}</button>`).join("")}
+function match(p,skip){const t=st.q.toLowerCase().split(/\s+/).filter(Boolean),h=p._h;
+ return t.every(x=>h.includes(x))&&(skip==="seg"||st.seg==="All"||p.seg===st.seg)&&(skip==="pk"||st.pk==="All"||BK.find(b=>b[0]===st.pk)[1](p.sz))&&(!st.of||p.offers.length)}
+function render(){
+ const cnt=(k,f)=>P.filter(p=>match(p,k)&&f(p)).length;
+ const segs=[...new Set(P.map(p=>p.seg))].sort((a,b)=>cnt("seg",p=>p.seg===b)-cnt("seg",p=>p.seg===a));
+ chips($("sg"),[["All","All",cnt("seg",_=>1)],...segs.map(s=>[s,s,cnt("seg",p=>p.seg===s)]),["OFFERS","🎁 With offers",P.filter(p=>p.offers.length).length]],"seg");
+ chips($("pk"),[["All","All sizes"],...BK.map(b=>[b[0],b[0],cnt("pk",p=>b[1](p.sz))])],"pk");
+ const L=P.filter(p=>match(p)),F=new Map();L.forEach(p=>{(F.get(p.fam)||F.set(p.fam,[]).get(p.fam)).push(p)});
+ $("cnt").textContent=F.size?`${F.size} products · ${L.length} pack sizes`:"";
+ $("g").innerHTML=F.size?[...F].map(([f,a])=>{a.sort((x,y)=>x.sz-y.sz||x.promo-y.promo);
+  return `<article class="card"><div class="ch"><div><h3>${esc(f)}</h3><span class="seg">${esc(a[0].seg)}</span></div>${a.some(p=>p.offers.length)?'<span class="ob">🎁 OFFER</span>':""}</div>
+  <div class="th"><span>Pack</span><span>MRP</span><span>Dealer rate<br>incl. GST</span></div>${a.map(row).join("")}</article>`}).join(""):'<div class="no">No products match. Try fewer words or tap “All”.</div>'}
+function row(p){const lt=(p.net/p.sz),sh=`*${p.name}*%0AMRP: ${R(p.mrp)}%0ADealer rate (incl. GST): ${R(p.net)}`+p.offers.map(o=>"%0AOffer: "+o).join("");
+ return `<div class="rw"><div class="row"><span class="p">${p.pack}<small>${p.per}${p.promo?" · PROMO":""}</small></span><span class="m">${R(p.mrp)}</span><span class="d">${R(p.net)}</span></div>
+ ${p.offers.length?`<div class="tg">${p.offers.map(o=>`<span class="${/already in rate/.test(o)?"":"cs"}">🎁 ${esc(o)}</span>`).join("")}${p.valid?`<span class="pr">Valid till ${esc(p.valid)}</span>`:""}</div>`:""}
+ <div class="dtl"><div><span>Dealer rate excl. GST</span><b>${R(p.ex)}</b></div><div><span>Dealer rate incl. GST</span><b>${R(p.net)}</b></div><div><span>Price per litre (incl. GST)</span><b>${R(lt)}</b></div>
+ <div><span>Dealer price before schemes (incl. GST)</span><b>${R(p.dlp)}</b></div><div><span>Material code</span><b>${p.code}</b></div>
+ <a class="wa" href="https://wa.me/?text=${encodeURIComponent(decodeURIComponent(sh))}" target="_blank" rel="noopener">Share on WhatsApp</a></div></div>`}
+document.addEventListener("click",e=>{const c=e.target.closest(".chip");if(c){const v=c.dataset.v,k=c.parentNode.id;
+  if(v==="OFFERS")st.of=!st.of;else if(k==="sg")st.seg=v;else st.pk=v;return render()}
+ if(e.target.closest(".dtl"))return;const r=e.target.closest(".rw");if(r)r.classList.toggle("open")});
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SR){$("mic").hidden=false;$("mic").onclick=()=>{const r=new SR();r.lang="en-IN";r.onresult=e=>{$("q").value=e.results[0][0].transcript;st.q=$("q").value;render()};r.start()}}
+$("fs").onclick=()=>document.body.classList.toggle("big");
+let tm;$("q").addEventListener("input",e=>{clearTimeout(tm);tm=setTimeout(()=>{st.q=e.target.value;render()},120)});
+fetch("data/products.json?t="+Date.now()).then(r=>r.json()).then(d=>{P=d.products;P.forEach(p=>p._h=hay(p));
+ $("dt").textContent="Rates as on "+new Date(d.updated).toLocaleString("en-IN",{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"});render()})
+ .catch(()=>{$("g").innerHTML='<div class="no">Could not load rates. Please refresh.</div>'});
+fetch("data/announcements.json?t="+Date.now()).then(r=>r.json()).then(d=>{const a=(d.items||[]).filter(i=>i.active);if(a.length){$("ann").hidden=false;$("ann").textContent="📢 "+a.map(i=>i.text).join("  •  ")}}).catch(()=>{});
+</script></body></html>
